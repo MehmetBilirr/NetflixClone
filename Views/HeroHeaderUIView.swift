@@ -31,7 +31,7 @@ class HeroHeaderUIView: UIView {
 extension HeroHeaderUIView {
     
     
-    func style(){
+    private func style(){
         addSubview(heroImageView)
         heroImageView.contentMode = .scaleAspectFill
         heroImageView.clipsToBounds = true
@@ -57,7 +57,7 @@ extension HeroHeaderUIView {
         
     }
     
-    func layout(){
+    private func layout(){
         
         playButton.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(75)

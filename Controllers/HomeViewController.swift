@@ -17,6 +17,7 @@ class HomeViewController: UIViewController {
         setup()
         style()
         layout()
+        configureNavBar()
         
     }
     
@@ -27,11 +28,13 @@ class HomeViewController: UIViewController {
 
 extension HomeViewController {
     
-    func setup(){
+    private func setup(){
         homeFeedTableView.register(CollectionViewTableViewCell.self, forCellReuseIdentifier: CollectionViewTableViewCell.identifier)
         view.addSubview(homeFeedTableView)
+        
         homeFeedTableView.delegate = self
         homeFeedTableView.dataSource = self
+        
         let headerView = HeroHeaderUIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
         homeFeedTableView.tableHeaderView = headerView
         
@@ -39,7 +42,7 @@ extension HomeViewController {
     
     
     
-    func style(){
+    private func style(){
         
         view.backgroundColor = .systemBackground
         
@@ -48,7 +51,7 @@ extension HomeViewController {
         
     }
     
-    func layout(){
+    private func layout(){
         
         homeFeedTableView.snp.makeConstraints { make in
             make.top.equalToSuperview()
@@ -58,6 +61,27 @@ extension HomeViewController {
         }
         
     }
+    private func configureNavBar(){
+        
+        var image = UIImage(named: "netflix")
+        image = image?.withRenderingMode(.alwaysOriginal)
+        
+        navigationItem.leftBarButtonItems = [
+            
+            UIBarButtonItem(image: image, style: .done, target: self, action: nil)
+            
+        ]
+        
+        
+        navigationItem.rightBarButtonItems = [
+            
+            UIBarButtonItem(image: UIImage(systemName: "person"), style: .done, target: self, action: nil),
+            UIBarButtonItem(image: UIImage(systemName: "play.rectangle"), style: .done, target: self, action: nil)
+            
+        ]
+    }
+    
+    
 }
 
 extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
@@ -81,6 +105,12 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 100
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let defaultOffset = view.safeAreaInsets.top
+        let offset = scrollView.contentOffset.y + defaultOffset
+        navigationController?.navigationBar.transform = .init(translationX: 0, y:min(0, -offset))
     }
     
     
