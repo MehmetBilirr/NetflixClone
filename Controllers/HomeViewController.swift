@@ -32,6 +32,8 @@ extension HomeViewController {
         view.addSubview(homeFeedTableView)
         homeFeedTableView.delegate = self
         homeFeedTableView.dataSource = self
+        let headerView = HeroHeaderUIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
+        homeFeedTableView.tableHeaderView = headerView
         
     }
     
