@@ -11,7 +11,7 @@ import SnapKit
 class HomeViewController: UIViewController {
     
     private let homeFeedTableView = UITableView(frame: .zero, style: .grouped)
-
+    let sectionTitles : [String] = ["Trendıng Movıes","Popular", "Trendıng Tv","Upcomıng Movıes","Top Rated"]
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -63,14 +63,16 @@ extension HomeViewController {
     }
     private func configureNavBar(){
         
-        var image = UIImage(named: "netflix")
-        image = image?.withRenderingMode(.alwaysOriginal)
+        let netflixButton = UIButton()
+        netflixButton.setImage(UIImage(named: "netflix"), for: .normal)
+            
+        let leftButton = UIBarButtonItem(customView: netflixButton)
+        leftButton.customView?.translatesAutoresizingMaskIntoConstraints = false
+        leftButton.customView?.snp.makeConstraints {
+         $0.width.height.equalTo(32)
+        }
+        navigationItem.leftBarButtonItem = leftButton
         
-        navigationItem.leftBarButtonItems = [
-            
-            UIBarButtonItem(image: image, style: .done, target: self, action: nil)
-            
-        ]
         
         
         navigationItem.rightBarButtonItems = [
@@ -87,7 +89,7 @@ extension HomeViewController {
 extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 20
+        return sectionTitles.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -97,6 +99,7 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CollectionViewTableViewCell.identifier, for: indexPath) as? CollectionViewTableViewCell else {return UITableViewCell()}
+
         return cell
     }
     
@@ -105,6 +108,18 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 100
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let header = view as? UITableViewHeaderFooterView else {return}
+        header.textLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
+        header.textLabel?.frame = CGRect(x: header.bounds.origin.x + 20, y: header.bounds.origin.y, width: 100, height: header.bounds.height)
+        header.textLabel?.textColor = .white
+        
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return sectionTitles[section]
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
