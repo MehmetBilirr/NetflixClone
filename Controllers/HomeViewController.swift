@@ -8,25 +8,30 @@
 import UIKit
 import SnapKit
 
+enum Sections:Int {
+    case trendingMovies = 0
+}
+
 class HomeViewController: UIViewController {
     
     private let homeFeedTableView = UITableView(frame: .zero, style: .grouped)
     let sectionTitles : [String] = ["Trendıng Movıes","Popular", "Trendıng Tv","Upcomıng Movıes","Top Rated"]
+    var titleArray = [Title]()
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         style()
         layout()
         configureNavBar()
-        NetworkService.shared.fetchTrendingMovies { result in
-            switch result {
-            case.success(let data):
-                print(data.results)
-            case.failure(let error):
-                print(error.localizedDescription)
-            }
-
-        }
+//        NetworkService.shared.fetchTrendingMovies { result in
+//            switch result {
+//            case.success(let data):
+//                self.titleArray = data.results
+//            case.failure(let error):
+//                print(error.localizedDescription)
+//            }
+//
+//        }
         
     }
     
@@ -107,10 +112,28 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: CollectionViewTableViewCell.identifier, for: indexPath) as? CollectionViewTableViewCell else {return UITableViewCell()}
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CollectionViewTableViewCell.identifier, for: indexPath) as? CollectionViewTableViewCell else { return UITableViewCell() }
+        
+        switch indexPath.section {
+        case Sections.trendingMovies.rawValue:
+            NetworkService.shared.fetchTrendingMovies { result in
+                switch result {
+                case.success(let data):
+                    cell.configure(titles: data.results)
+                    
+                case.failure(let error):
+                    print(error.localizedDescription)
+                }
 
+            }
+            
+        
+        default:
+            return UITableViewCell()
+            
+        }
         return cell
-    }
+        }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 200

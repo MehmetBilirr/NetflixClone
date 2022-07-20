@@ -9,6 +9,7 @@ import Foundation
 
 struct TrendingTitleRepsonse:Codable {
     let results:[Title]
+    
 }
 
 

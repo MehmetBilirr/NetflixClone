@@ -11,6 +11,7 @@ import SnapKit
 class CollectionViewTableViewCell: UITableViewCell {
 
     static let identifier = "CollectionViewTableViewCell"
+    var titlesArray = [Title]()
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -36,16 +37,16 @@ class CollectionViewTableViewCell: UITableViewCell {
 
 extension CollectionViewTableViewCell {
     
-    func setup() {
+    private func setup() {
         
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(TitleCollectionViewCell.self, forCellWithReuseIdentifier: TitleCollectionViewCell.identifier)
         contentView.addSubview(collectionView)
         collectionView.delegate = self
         collectionView.dataSource = self
         
     }
     
-    func stylee() {
+    private func stylee() {
         contentView.backgroundColor = .systemPink
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         let layout = UICollectionViewFlowLayout()
@@ -54,21 +55,33 @@ extension CollectionViewTableViewCell {
         collectionView.collectionViewLayout = layout
         
         
+    }
+    func configure(titles:[Title]) {
+            self.titlesArray = titles
+        print(titlesArray)
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.collectionView.reloadData()
+        }
+        
+        
         
         
     }
+    
+    
     
 }
 
 extension CollectionViewTableViewCell:UICollectionViewDelegate,UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return titlesArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        cell.backgroundColor = .green
-        return cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TitleCollectionViewCell.identifier, for: indexPath) as? TitleCollectionViewCell
+        cell?.configure(with: titlesArray[indexPath.row].poster_path ?? "")
+        return cell ?? UICollectionViewCell()
     }
     
     

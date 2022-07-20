@@ -14,8 +14,8 @@ enum Route {
     static let apiKey = "4377ea3a3ac936fc129eedc132d674df"
     
     case fetchTrendingMovies
-    case placeOrder(String)
-    case fetchCategoryDishes(String)
+    case fetchTrendingTvSeries
+    case fetchUpComingMovies
     case fetchOrders
     
     
@@ -24,10 +24,10 @@ enum Route {
         switch self {
         case.fetchTrendingMovies:
             return "/trending/movie/day?api_key=\(Route.apiKey)"
-        case .placeOrder(let dishId):
-            return "/orders/\(dishId)"
-        case.fetchCategoryDishes(let categoryId):
-            return "/dishes/\(categoryId)"
+        case .fetchTrendingTvSeries:
+            return "/trending/tv/day?api_key=\(Route.apiKey)"
+        case.fetchUpComingMovies:
+            return "/trending/movie/upcoming?api_key=\(Route.apiKey)"
         case.fetchOrders:
             return "/orders"
         }
