@@ -18,6 +18,15 @@ class HomeViewController: UIViewController {
         style()
         layout()
         configureNavBar()
+        NetworkService.shared.fetchTrendingMovies { result in
+            switch result {
+            case.success(let data):
+                print(data.results)
+            case.failure(let error):
+                print(error.localizedDescription)
+            }
+
+        }
         
     }
     

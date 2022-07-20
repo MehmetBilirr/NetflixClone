@@ -10,7 +10,7 @@ import Foundation
 
 enum Route {
     
-    static let baseUrl = "https://api.themoviedb.org/"
+    static let baseUrl = "https://api.themoviedb.org/3"
     static let apiKey = "4377ea3a3ac936fc129eedc132d674df"
     
     case fetchTrendingMovies
