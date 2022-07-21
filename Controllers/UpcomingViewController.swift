@@ -14,6 +14,7 @@ import UIKit
 class UpcomingViewController: UIViewController {
     
     private let upcomingTableView = UITableView(frame: .zero, style: .grouped)
+    private var titleArray = [Title]()
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -21,7 +22,8 @@ class UpcomingViewController: UIViewController {
         
         setup()
         style()
-        layout()
+        fetchData()
+
         
         
         
@@ -55,20 +57,25 @@ class UpcomingViewController: UIViewController {
     private func style(){
         
         view.backgroundColor = .systemBackground
-        
-        
-        
-        
-    }
-    
-    private func layout(){
-        
-        
-        
     }
     
     
     
+    private func fetchData(){
+        NetworkService.shared.fetchUpcomingMovies { response in
+            switch response {
+            case.success(let data):
+                
+                self.titleArray = data.results
+                
+                
+                
+            case.failure(let error):
+                print(error.localizedDescription)
+            }
+        
+        }
+    }
     
     
     
@@ -78,12 +85,12 @@ class UpcomingViewController: UIViewController {
 
 extension UpcomingViewController:UITableViewDataSource,UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return titleArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: UpcomingTableViewCell.identifier, for: indexPath) as? UpcomingTableViewCell else { return UITableViewCell() }
-        cell.backgroundColor = .systemBackground
+        cell.configure(title: titleArray[indexPath.row])
         return cell
     }
     

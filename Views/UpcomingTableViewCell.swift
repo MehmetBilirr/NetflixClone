@@ -87,5 +87,16 @@ extension UpcomingTableViewCell {
         }
         
     }
+    
+    func configure(title:Title) {
+        if let path =  title.poster_path {
+            let url = "https://image.tmdb.org/t/p/w500/\(path)"
+            self.posterImage.sd_setImage(with: url.asUrl)
+        }
+        
+        
+        nameLabel.text = title.original_name
+        
+    }
 
 }
