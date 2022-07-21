@@ -8,6 +8,11 @@
 import UIKit
 import SnapKit
 
+
+protocol heroHeaderViewDelegate {
+    func getheroHeaderImage(data:String)
+}
+
 enum Sections:Int {
     case trendingMovies = 0
     case popular = 1
@@ -16,26 +21,26 @@ enum Sections:Int {
     case topRated = 4
 }
 
-class HomeViewController: UIViewController {
+
+
+
+final class HomeViewController: UIViewController {
     
     private let homeFeedTableView = UITableView(frame: .zero, style: .grouped)
     let sectionTitles : [String] = ["Trendıng Movıes","Popular", "Trendıng Tv","Upcomıng Movıes","Top Rated"]
     var titleArray = [Title]()
+    static var heroViewdelegate : heroHeaderViewDelegate?
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         style()
         layout()
         configureNavBar()
-//        NetworkService.shared.fetchTrendingMovies { result in
-//            switch result {
-//            case.success(let data):
-//                self.titleArray = data.results
-//            case.failure(let error):
-//                print(error.localizedDescription)
-//            }
-//
-//        }
+        
+        
         
     }
     
@@ -102,6 +107,9 @@ extension HomeViewController {
     }
     
     
+    
+    
+    
 }
 
 extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
@@ -124,6 +132,9 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
                 switch result {
                 case.success(let data):
                     cell.configure(titles: data.results)
+                    let image = data.results[0].poster_path
+                    HomeViewController.heroViewdelegate?.getheroHeaderImage(data: image!)
+                    
                     
                 case.failure(let error):
                     print(error.localizedDescription)
@@ -221,9 +232,6 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
 }
 
 
-extension HomeViewController {
+
     
-    private func fetchTrendingMovies(){
-        
-    }
-}
+

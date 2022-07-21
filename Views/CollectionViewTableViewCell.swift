@@ -58,7 +58,7 @@ extension CollectionViewTableViewCell {
     }
     func configure(titles:[Title]) {
             self.titlesArray = titles
-        print(titlesArray)
+        
         
         DispatchQueue.main.async { [weak self] in
             self?.collectionView.reloadData()
