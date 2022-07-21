@@ -21,7 +21,18 @@ class NetworkService {
     }
     
     
+    func fetchPopularMovies(completion:@escaping(Result<TrendingTitleRepsonse,Error>)->Void) {
+        
+        request(route: .fetchPopularMovies, method: .get, completion: completion)
+    }
     
+    func fetchUpcomingMovies(completion:@escaping(Result<TrendingTitleRepsonse,Error>)->Void) {
+        request(route: .fetchUpComingMovies, method: .get, completion: completion)
+    }
+    
+    func fetchTopRatedMovies(completion:@escaping(Result<TrendingTitleRepsonse,Error>)->Void) {
+        request(route: .fetchTopRated, method: .get, completion: completion)
+    }
     
     
     private func request<T:Codable>(route:Route,method:Method,parameters:[String:Any]? = nil, completion: @escaping(Result<T,Error>) -> Void ) {
@@ -37,12 +48,12 @@ class NetworkService {
             
             var result: Result<Data,Error>?
             if let data = data {
-                result = .success(data)
-                let responseString = String(data:data, encoding: .utf8) ?? "Could not stringify our data"
-                print("The response is :\n \(responseString)")
-//                let decoder = JSONDecoder()
-//                let response = try? decoder.decode(TrendingTitleRepsonse.self, from: data)
-//                    completion(.success(response as! T))
+//                result = .success(data)
+//                let responseString = String(data:data, encoding: .utf8) ?? "Could not stringify our data"
+//                print("The response is :\n \(responseString)")
+                let decoder = JSONDecoder()
+                let response = try? decoder.decode(TrendingTitleRepsonse.self, from: data)
+                    completion(.success(response as! T))
                 
                 
                 
@@ -53,13 +64,13 @@ class NetworkService {
             }
             
             
-            DispatchQueue.main.async {
-
-                // TODO decode our result and send back to the user
-                self.handleResponse(result: result, completion: completion)
-
-
-            }
+//            DispatchQueue.main.async {
+//
+//                // TODO decode our result and send back to the user
+//                self.handleResponse(result: result, completion: completion)
+//
+//
+//            }
         }.resume()
         
         
@@ -85,7 +96,9 @@ class NetworkService {
                 return
             }
             
-            
+            if let error = response.error {
+                completion(.failure(AppError.serverError(error)))
+            }
             
             if let decodedData = response.data {
                 completion(.success(decodedData))

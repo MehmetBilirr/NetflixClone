@@ -10,6 +10,10 @@ import SnapKit
 
 enum Sections:Int {
     case trendingMovies = 0
+    case popular = 1
+    case trendingTvs = 2
+    case upcoming = 3
+    case topRated = 4
 }
 
 class HomeViewController: UIViewController {
@@ -124,6 +128,58 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
                 case.failure(let error):
                     print(error.localizedDescription)
                 }
+                
+
+            }
+        case Sections.popular.rawValue:
+            NetworkService.shared.fetchPopularMovies { result in
+                switch result {
+                case.success(let data):
+                    cell.configure(titles: data.results)
+                    
+                case.failure(let error):
+                    print(error.localizedDescription)
+                }
+                
+
+            }
+            
+        case Sections.trendingTvs.rawValue:
+            NetworkService.shared.fetchTrendingTvSeries { result in
+                switch result {
+                case.success(let data):
+                    cell.configure(titles: data.results)
+                    
+                case.failure(let error):
+                    print(error.localizedDescription)
+                }
+                
+
+            }
+            
+        case Sections.upcoming.rawValue:
+            
+            NetworkService.shared.fetchUpcomingMovies { result in
+                switch result {
+                case.success(let data):
+                    cell.configure(titles: data.results)
+                    
+                case.failure(let error):
+                    print(error.localizedDescription)
+                }
+                
+
+            }
+        case Sections.topRated.rawValue:
+            NetworkService.shared.fetchTopRatedMovies { result in
+                switch result {
+                case.success(let data):
+                    cell.configure(titles: data.results)
+                    
+                case.failure(let error):
+                    print(error.localizedDescription)
+                }
+                
 
             }
             
@@ -162,4 +218,12 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
     
     
     
+}
+
+
+extension HomeViewController {
+    
+    private func fetchTrendingMovies(){
+        
+    }
 }

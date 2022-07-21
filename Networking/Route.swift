@@ -16,7 +16,8 @@ enum Route {
     case fetchTrendingMovies
     case fetchTrendingTvSeries
     case fetchUpComingMovies
-    case fetchOrders
+    case fetchPopularMovies
+    case fetchTopRated
     
     
     var description : String {
@@ -27,9 +28,12 @@ enum Route {
         case .fetchTrendingTvSeries:
             return "/trending/tv/day?api_key=\(Route.apiKey)"
         case.fetchUpComingMovies:
-            return "/trending/movie/upcoming?api_key=\(Route.apiKey)"
-        case.fetchOrders:
-            return "/orders"
+            return "/movie/upcoming?api_key=\(Route.apiKey)"
+        case.fetchPopularMovies:
+            return "/movie/popular?api_key=\(Route.apiKey)"
+        case.fetchTopRated:
+            return "/movie/top_rated?api_key=\(Route.apiKey)"
         }
+    
     }
 }
