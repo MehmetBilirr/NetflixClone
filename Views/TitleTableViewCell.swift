@@ -7,9 +7,9 @@
 
 import UIKit
 import SnapKit
-class UpcomingTableViewCell: UITableViewCell {
+class TitleTableViewCell: UITableViewCell {
 
-    static let identifier = "UpcomingViewTableViewCell"
+    static let identifier = "TitleTableViewCell"
     var titlesArray = [Title]()
     private let posterImage = UIImageView()
     private let nameLabel = UILabel()
@@ -33,7 +33,7 @@ class UpcomingTableViewCell: UITableViewCell {
 
 
 
-extension UpcomingTableViewCell {
+extension TitleTableViewCell {
     
     func setup(){
         contentView.addSubview(posterImage)
@@ -47,11 +47,12 @@ extension UpcomingTableViewCell {
         posterImage.clipsToBounds = true
         posterImage.image = UIImage(named: "batman")
         
-        nameLabel.text = "Batman"
         nameLabel.textAlignment = .center
-        nameLabel.font = UIFont.systemFont(ofSize: 15)
+        nameLabel.font = UIFont.systemFont(ofSize: 10)
         nameLabel.textColor = .white
         nameLabel.numberOfLines = 0
+        
+        
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         
         playButton.translatesAutoresizingMaskIntoConstraints = false
@@ -78,24 +79,29 @@ extension UpcomingTableViewCell {
         
         nameLabel.snp.makeConstraints { make in
             make.left.equalTo(posterImage.snp.right).offset(20)
-            make.top.equalToSuperview().offset(70)
+            make.top.equalToSuperview().offset(55)
+            make.right.equalTo(playButton.snp.left)
         }
         
         playButton.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-10)
-            make.top.equalToSuperview().offset(50)
+            make.right.equalToSuperview()
+            make.top.equalToSuperview().offset(55)
+            make.width.equalTo(50)
+            
         }
         
     }
     
     func configure(title:Title) {
-        if let path =  title.poster_path {
-            let url = "https://image.tmdb.org/t/p/w500/\(path)"
-            self.posterImage.sd_setImage(with: url.asUrl)
+        guard let path =  title.poster_path, let name = title.original_title else  {
+        
+            return
         }
         
+        let url = "https://image.tmdb.org/t/p/w500/\(path)"
+        self.posterImage.sd_setImage(with: url.asUrl)
         
-        nameLabel.text = title.original_name
+        nameLabel.text = name
         
     }
 

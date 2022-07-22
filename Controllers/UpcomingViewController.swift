@@ -36,7 +36,7 @@ class UpcomingViewController: UIViewController {
     
     private func setup(){
         
-        upcomingTableView.register(UpcomingTableViewCell.self, forCellReuseIdentifier: UpcomingTableViewCell.identifier)
+        upcomingTableView.register(TitleTableViewCell.self, forCellReuseIdentifier: TitleTableViewCell.identifier)
         view.addSubview(upcomingTableView)
         
         upcomingTableView.delegate = self
@@ -67,6 +67,10 @@ class UpcomingViewController: UIViewController {
             case.success(let data):
                 
                 self.titleArray = data.results
+                DispatchQueue.main.async {
+                    self.upcomingTableView.reloadData()
+                }
+                
                 
                 
                 
@@ -89,8 +93,11 @@ extension UpcomingViewController:UITableViewDataSource,UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: UpcomingTableViewCell.identifier, for: indexPath) as? UpcomingTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TitleTableViewCell.identifier, for: indexPath) as? TitleTableViewCell else { return UITableViewCell() }
         cell.configure(title: titleArray[indexPath.row])
+                
+        
+        cell.backgroundColor = .systemBackground
         return cell
     }
     
