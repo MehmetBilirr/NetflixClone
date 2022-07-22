@@ -18,7 +18,8 @@ enum Route {
     case fetchUpComingMovies
     case fetchPopularMovies
     case fetchTopRated
-    
+    case fetchDiscoverMovies
+    case search(String)
     
     var description : String {
         
@@ -33,7 +34,12 @@ enum Route {
             return "/movie/popular?api_key=\(Route.apiKey)"
         case.fetchTopRated:
             return "/movie/top_rated?api_key=\(Route.apiKey)"
+        case.fetchDiscoverMovies:
+            return "/discover/movie?api_key=\(Route.apiKey)&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate"
+        case .search(let query):
+            return "/search/movie?api_key=\(Route.apiKey)&language=en-US&query=\(query)&page=1&include_adult=false"
         }
+    
     
     }
 }

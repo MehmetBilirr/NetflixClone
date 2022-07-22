@@ -34,6 +34,14 @@ class NetworkService {
         request(route: .fetchTopRated, method: .get, completion: completion)
     }
     
+    func fetchDiscoverMovies(completion:@escaping(Result<TrendingTitleRepsonse,Error>)->Void) {
+        request(route: .fetchDiscoverMovies, method: .get, completion: completion)
+    }
+    
+    func fetchSearchResult(query:String,completion:@escaping(Result<TrendingTitleRepsonse,Error>)->Void) {
+        request(route: .search(query), method: .get, completion: completion)
+    }
+    
     
     private func request<T:Codable>(route:Route,method:Method,parameters:[String:Any]? = nil, completion: @escaping(Result<T,Error>) -> Void ) {
         

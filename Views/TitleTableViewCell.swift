@@ -48,7 +48,7 @@ extension TitleTableViewCell {
         posterImage.image = UIImage(named: "batman")
         
         nameLabel.textAlignment = .center
-        nameLabel.font = UIFont.systemFont(ofSize: 10)
+        
         nameLabel.textColor = .white
         nameLabel.numberOfLines = 0
         

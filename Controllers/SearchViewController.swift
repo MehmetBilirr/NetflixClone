@@ -8,8 +8,13 @@
 import UIKit
 
 class SearchViewController: UIViewController {
+    
+    
+    
     private let discoverTableView = UITableView(frame: .zero, style: .grouped)
     private var titleArray = [Title]()
+    private var searchController = UISearchController()
+    private let resultSearchVc = SearchResultViewController()
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -40,19 +45,34 @@ class SearchViewController: UIViewController {
         
         
         
+        searchController = UISearchController(searchResultsController: resultSearchVc)
+        discoverTableView.tableHeaderView = searchController.searchBar
+        searchController.searchResultsUpdater = self
+        
+        
+        
     }
+        
+        
+    
     
     
     
     private func style(){
         
         view.backgroundColor = .systemBackground
+        
+        searchController.searchBar.tintColor = .white
+        searchController.dimsBackgroundDuringPresentation = false
+        searchController.searchBar.sizeToFit()
     }
     
     
     
+    
+    
     private func fetchData(){
-        NetworkService.shared.fetchUpcomingMovies { response in
+        NetworkService.shared.fetchDiscoverMovies { response in
             switch response {
             case.success(let data):
                 
@@ -92,3 +112,34 @@ extension SearchViewController:UITableViewDataSource,UITableViewDelegate {
 
 }
 
+extension SearchViewController:UISearchResultsUpdating,UISearchControllerDelegate {
+    
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        
+        let searchBar = searchController.searchBar
+        guard let query = searchBar.text,
+                !query.trimmingCharacters(in: .whitespaces).isEmpty,
+              query.trimmingCharacters(in: .whitespaces).count >= 3,
+              let resultController = searchController.searchResultsController as? SearchResultViewController else {return}
+        
+        NetworkService.shared.fetchSearchResult(query: query) { result in
+            switch result {
+            case.success(let titles):
+                resultController.titlesArray = titles.results
+                DispatchQueue.main.async {
+                    
+                    resultController.searchResultsCollectionView.reloadData()
+                }
+                    
+                
+                
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    
+
+}
