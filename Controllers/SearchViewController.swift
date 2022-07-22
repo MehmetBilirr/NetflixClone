@@ -72,7 +72,7 @@ class SearchViewController: UIViewController {
     
     
     private func fetchData(){
-        NetworkService.shared.fetchDiscoverMovies { response in
+        NetworkServiceTMDB.shared.fetchDiscoverMovies { response in
             switch response {
             case.success(let data):
                 
@@ -123,7 +123,7 @@ extension SearchViewController:UISearchResultsUpdating,UISearchControllerDelegat
               query.trimmingCharacters(in: .whitespaces).count >= 3,
               let resultController = searchController.searchResultsController as? SearchResultViewController else {return}
         
-        NetworkService.shared.fetchSearchResult(query: query) { result in
+        NetworkServiceTMDB.shared.fetchSearchResult(query: query) { result in
             switch result {
             case.success(let titles):
                 resultController.titlesArray = titles.results

@@ -40,6 +40,15 @@ final class HomeViewController: UIViewController {
         layout()
         configureNavBar()
         
+        NetworkServiceYT.shared.fetchVideo(query: "Harry") { result in
+            switch result {
+            case .success(let data):
+                print(data.items)
+            case.failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        
         
         
     }
@@ -128,7 +137,7 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
         
         switch indexPath.section {
         case Sections.trendingMovies.rawValue:
-            NetworkService.shared.fetchTrendingMovies { result in
+            NetworkServiceTMDB.shared.fetchTrendingMovies { result in
                 switch result {
                 case.success(let data):
                     cell.configure(titles: data.results)
@@ -143,7 +152,7 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
 
             }
         case Sections.popular.rawValue:
-            NetworkService.shared.fetchPopularMovies { result in
+            NetworkServiceTMDB.shared.fetchPopularMovies { result in
                 switch result {
                 case.success(let data):
                     cell.configure(titles: data.results)
@@ -156,7 +165,7 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
             }
             
         case Sections.trendingTvs.rawValue:
-            NetworkService.shared.fetchTrendingTvSeries { result in
+            NetworkServiceTMDB.shared.fetchTrendingTvSeries { result in
                 switch result {
                 case.success(let data):
                     cell.configure(titles: data.results)
@@ -170,7 +179,7 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
             
         case Sections.upcoming.rawValue:
             
-            NetworkService.shared.fetchUpcomingMovies { result in
+            NetworkServiceTMDB.shared.fetchUpcomingMovies { result in
                 switch result {
                 case.success(let data):
                     cell.configure(titles: data.results)
@@ -182,7 +191,7 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
 
             }
         case Sections.topRated.rawValue:
-            NetworkService.shared.fetchTopRatedMovies { result in
+            NetworkServiceTMDB.shared.fetchTopRatedMovies { result in
                 switch result {
                 case.success(let data):
                     cell.configure(titles: data.results)

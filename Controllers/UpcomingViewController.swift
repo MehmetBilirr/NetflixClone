@@ -62,7 +62,7 @@ class UpcomingViewController: UIViewController {
     
     
     private func fetchData(){
-        NetworkService.shared.fetchUpcomingMovies { response in
+        NetworkServiceTMDB.shared.fetchUpcomingMovies { response in
             switch response {
             case.success(let data):
                 
