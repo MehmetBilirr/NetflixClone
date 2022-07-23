@@ -40,14 +40,8 @@ final class HomeViewController: UIViewController {
         layout()
         configureNavBar()
         
-        NetworkServiceYT.shared.fetchVideo(query: "Harry") { result in
-            switch result {
-            case .success(let data):
-                print(data.items)
-            case.failure(let error):
-                print(error.localizedDescription)
-            }
-        }
+        navigationController?.pushViewController(TitlePreviewViewController(), animated: true)
+        
         
         
         

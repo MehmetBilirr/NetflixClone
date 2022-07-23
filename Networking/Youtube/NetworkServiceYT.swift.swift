@@ -12,11 +12,12 @@ class NetworkServiceYT {
     static let shared = NetworkServiceYT()
     private init() {}
     
-    func fetchVideo(query:String,completion:@escaping(Result<YoutubeSearchResponse,Error>)->Void) {
+    func fetchVideo(query:String,completion:@escaping(Result<VideoElement,Error>)->Void) {
+        guard let query = query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {return}
         requestYT(route: .fetchMovie(query), method: .get, completion: completion)
     }
     
-    private func requestYT<T:Codable>(route:RouteYT,method:Method,parameters:[String:Any]? = nil, completion: @escaping(Result<T,Error>) -> Void ) {
+    private func requestYT(route:RouteYT,method:Method,parameters:[String:Any]? = nil, completion: @escaping(Result<VideoElement,Error>) -> Void ) {
         
         guard let request = createRequestYT(route: route, method: method, parameters: parameters) else {
             
@@ -27,31 +28,22 @@ class NetworkServiceYT {
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             
-            var result: Result<Data,Error>?
-            if let data = data {
-//                result = .success(data)
-//                let responseString = String(data:data, encoding: .utf8) ?? "Could not stringify our data"
-//                print("The response is :\n \(responseString)")
-                let decoder = JSONDecoder()
-                let response = try? decoder.decode(YoutubeSearchResponse.self, from: data)
-                completion(.success(response as! T))
-                
-                
-                
-                
-            }else if let error = error {
-                result = .failure(error)
-                print("The error is : \(error.localizedDescription)")
+            guard let data = data, error == nil else {
+                return
             }
             
-            
-//            DispatchQueue.main.async {
-//
-//                // TODO decode our result and send back to the user
-//                self.handleResponse(result: result, completion: completion)
-//
-//
-//            }
+            do {
+                let results = try JSONDecoder().decode(YoutubeSearchResponse.self, from: data)
+                
+                completion(.success(results.items[0]))
+                
+
+            } catch {
+                completion(.failure(error))
+                
+            }
+
+        
         }.resume()
         
         
@@ -94,7 +86,7 @@ class NetworkServiceYT {
         return urlRequest
     }
     
-    
+   
     
     
 }

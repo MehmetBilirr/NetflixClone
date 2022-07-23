@@ -17,7 +17,7 @@ enum RouteYT {
     var description:String {
         switch self {
         case .fetchMovie(let query):
-            return "\(RouteYT.YoutubeBaseURL)?q=Harry&key=\(RouteYT.YoutubeAPI_Key)"
+            return "?q=\(query)&key=\(RouteYT.YoutubeAPI_Key)"
         }
     }
 }

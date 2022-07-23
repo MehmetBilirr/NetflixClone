@@ -93,7 +93,7 @@ extension TitleTableViewCell {
     }
     
     func configure(title:Title) {
-        guard let path =  title.poster_path, let name = title.original_title else  {
+        guard let path =  title.poster_path, let name = title.original_title ?? title.original_name else  {
         
             return
         }
