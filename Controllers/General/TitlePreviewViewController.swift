@@ -42,7 +42,7 @@ extension TitlePreviewViewController {
         titleLabel.textAlignment = .center
         titleLabel.textColor = .white
         titleLabel.numberOfLines = 0
-        titleLabel.text = "Harry Potter"
+        
         titleLabel.font = .systemFont(ofSize: 22, weight: .bold)
         
         
@@ -52,7 +52,7 @@ extension TitlePreviewViewController {
         overviewLabel.textColor = .white
         overviewLabel.numberOfLines = 0
         overviewLabel.lineBreakMode = .byWordWrapping
-        overviewLabel.text = "adasd asd asdasdasdadasd dasdasda asdasdas asdasdasdasdasd asdasdas dasdasd "
+        
         
         
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -92,5 +92,13 @@ extension TitlePreviewViewController {
             make.width.equalTo(200)
         }
         
+    }
+    
+    func configure(model:TitlePreviewModel) {
+        
+        titleLabel.text = model.title
+        overviewLabel.text = model.titleOverview
+        guard let url = URL(string: "https://www.youtube.com/embed/\(model.youtubeView.id.videoId)") else {return }
+        webView.load(URLRequest(url: url))
     }
 }

@@ -8,8 +8,12 @@
 import UIKit
 import SnapKit
 
-class CollectionViewTableViewCell: UITableViewCell {
+protocol CollectionViewTableViewCellDelegate:AnyObject {
+    func collectionViewTableViewCellDidTapCell(_ cell:CollectionViewTableViewCell,viewModel:TitlePreviewModel)
+}
 
+class CollectionViewTableViewCell: UITableViewCell {
+    weak var delegate: CollectionViewTableViewCellDelegate?
     static let identifier = "CollectionViewTableViewCell"
     var titlesArray = [Title]()
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
@@ -91,10 +95,15 @@ extension CollectionViewTableViewCell:UICollectionViewDelegate,UICollectionViewD
         guard let titleName = title.original_name ?? title.original_title else {return}
         
         
-        NetworkServiceYT.shared.fetchVideo(query: titleName + "trailer") { result in
+        NetworkServiceYT.shared.fetchVideo(query: titleName + "trailer") { [weak self] result in
             switch result {
             case.success(let video):
-                print(video)
+                guard let title = self?.titlesArray[indexPath.row] else {return}
+                guard let strongSelf = self else {return}
+                let titleName = title.original_title ?? title.original_name
+                let overview = title.overview
+                let viewModel = TitlePreviewModel(title: titleName ?? "", youtubeView: video, titleOverview: overview ?? "")
+                self?.delegate?.collectionViewTableViewCellDidTapCell(strongSelf, viewModel: viewModel)
             case.failure(let error):
                 print(error.localizedDescription)
             }

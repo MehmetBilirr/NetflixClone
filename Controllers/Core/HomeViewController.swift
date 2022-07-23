@@ -40,7 +40,7 @@ final class HomeViewController: UIViewController {
         layout()
         configureNavBar()
         
-        navigationController?.pushViewController(TitlePreviewViewController(), animated: true)
+        
         
         
         
@@ -128,7 +128,7 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CollectionViewTableViewCell.identifier, for: indexPath) as? CollectionViewTableViewCell else { return UITableViewCell() }
-        
+        cell.delegate = self
         switch indexPath.section {
         case Sections.trendingMovies.rawValue:
             NetworkServiceTMDB.shared.fetchTrendingMovies { result in
@@ -234,6 +234,20 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
     
 }
 
+extension HomeViewController:CollectionViewTableViewCellDelegate {
+    func collectionViewTableViewCellDidTapCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewModel) {
+        
+        DispatchQueue.main.async { [weak self] in
+            let vc = TitlePreviewViewController()
+            vc.configure(model: viewModel)
+            
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
+        
+    }
+    
+    
+}
 
 
     
