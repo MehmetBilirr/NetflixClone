@@ -237,6 +237,11 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
 }
 
 extension HomeViewController:CollectionViewTableViewCellDelegate {
+    func collectionViewTableViewCellDownloadButtonTapped() {
+        let vc = DownloadsViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
     func collectionViewTableViewCellDidTapCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewModel) {
         
         DispatchQueue.main.async { [weak self] in

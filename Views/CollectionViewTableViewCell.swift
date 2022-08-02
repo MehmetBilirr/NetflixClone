@@ -10,7 +10,9 @@ import SnapKit
 
 protocol CollectionViewTableViewCellDelegate:AnyObject {
     func collectionViewTableViewCellDidTapCell(_ cell:CollectionViewTableViewCell,viewModel:TitlePreviewModel)
+    func collectionViewTableViewCellDownloadButtonTapped()
 }
+
 
 class CollectionViewTableViewCell: UITableViewCell {
     weak var delegate: CollectionViewTableViewCellDelegate?
@@ -34,6 +36,7 @@ class CollectionViewTableViewCell: UITableViewCell {
         super.layoutSubviews()
         collectionView.frame = contentView.bounds
     }
+    
     
     
 }
@@ -68,10 +71,12 @@ extension CollectionViewTableViewCell {
             self?.collectionView.reloadData()
         }
         
-        
-        
-        
     }
+    private func downloadTitleAt(indexpath:IndexPath) {
+        print("Downloanding \(titlesArray[indexpath.row].original_title!)")
+    }
+    
+    
     
     
     
@@ -109,6 +114,24 @@ extension CollectionViewTableViewCell:UICollectionViewDelegate,UICollectionViewD
             }
             
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let config = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            let downloadAction = UIAction(title: "Download", subtitle: nil, image: nil, identifier: nil, discoverabilityTitle: nil, state: .off) { _ in
+                self.downloadTitleAt(indexpath: indexPath)
+                self.delegate?.collectionViewTableViewCellDownloadButtonTapped()
+                collectionView.reloadData()
+                
+            
+            }
+            let exitAction = UIAction(title: "Exit", subtitle: nil, image: nil, identifier: nil, discoverabilityTitle: nil, state: .off) { _ in
+                }
+            return UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [downloadAction,exitAction])
+        }
+        
+        return config
+        
     }
     
     
