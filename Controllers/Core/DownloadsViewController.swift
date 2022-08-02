@@ -43,6 +43,9 @@ class DownloadsViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationItem.largeTitleDisplayMode  = .always
         
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("downloaded"), object: nil, queue: nil) { _ in
+            self.fetchLocalStorageForDownload()
+        }
         
         
     }
@@ -121,6 +124,24 @@ extension DownloadsViewController:UITableViewDataSource,UITableViewDelegate {
             case .failure(let error):
                 print(error)
             }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        switch editingStyle {
+        case.delete:
+            DataPersistanceManager.shared.deleteTitleWith(model: titleArray[indexPath.row]) { [weak self] result in
+                switch result {
+                case.success():
+                    print("Deleted from the database")
+                case.failure(let error):
+                    print(error.localizedDescription)
+                }
+                self?.titleArray.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+        default:
+            break;
         }
     }
     
