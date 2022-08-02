@@ -105,7 +105,7 @@ extension CollectionViewTableViewCell:UICollectionViewDelegate,UICollectionViewD
                 let viewModel = TitlePreviewModel(title: titleName ?? "", youtubeView: video, titleOverview: overview ?? "")
                 self?.delegate?.collectionViewTableViewCellDidTapCell(strongSelf, viewModel: viewModel)
             case.failure(let error):
-                print(error.localizedDescription)
+                print(error)
             }
             
         }

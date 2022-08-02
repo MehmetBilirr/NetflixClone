@@ -11,6 +11,8 @@ class SearchViewController: UIViewController {
     
     
     
+    
+    
     private let discoverTableView = UITableView(frame: .zero, style: .grouped)
     private var titleArray = [Title]()
     private var searchController = UISearchController()
@@ -122,6 +124,7 @@ extension SearchViewController:UISearchResultsUpdating,UISearchControllerDelegat
                 !query.trimmingCharacters(in: .whitespaces).isEmpty,
               query.trimmingCharacters(in: .whitespaces).count >= 3,
               let resultController = searchController.searchResultsController as? SearchResultViewController else {return}
+        resultController.delegate = self
         
         NetworkServiceTMDB.shared.fetchSearchResult(query: query) { result in
             switch result {
@@ -142,4 +145,19 @@ extension SearchViewController:UISearchResultsUpdating,UISearchControllerDelegat
     
     
 
+}
+
+extension SearchViewController: SearchResultViewControllerDelegate {
+    func searchResultsViewControllerDidTapItem(_ viewModel: TitlePreviewModel) {
+
+        DispatchQueue.main.async { [weak self] in
+            let vc = TitlePreviewViewController()
+            vc.configure(model: viewModel)
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
+        
+        
+    }
+    
+    
 }

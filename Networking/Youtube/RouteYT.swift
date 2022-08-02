@@ -9,7 +9,7 @@ import Foundation
 
 enum RouteYT {
     
-    static let YoutubeAPI_Key = "AIzaSyBHvokfsv2yxxmDBlpsfomB5qYvP9jw4Ko"
+    static let YoutubeAPI_Key = "AIzaSyAaKCJPed26OEeh6G4OMvHpraHJ0u1TlsM"
     static let YoutubeBaseURL = "https://youtube.googleapis.com/youtube/v3/search"
     
     case fetchMovie(String)

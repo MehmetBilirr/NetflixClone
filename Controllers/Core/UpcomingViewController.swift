@@ -115,14 +115,14 @@ extension UpcomingViewController:UITableViewDataSource,UITableViewDelegate {
                 
                 DispatchQueue.main.async { [weak self] in
                     let vc = TitlePreviewViewController()
-                    let viewModel = TitlePreviewModel(title: titleName, youtubeView: video, titleOverview: title.overview!)
+                    let viewModel = TitlePreviewModel(title: titleName, youtubeView: video, titleOverview: title.overview ?? "")
                     vc.configure(model: viewModel)
                     
                     self?.navigationController?.pushViewController(vc, animated: true)
                     }
                 
             case .failure(let error):
-                print(error.localizedDescription)
+                print(error)
             }
         }
     }

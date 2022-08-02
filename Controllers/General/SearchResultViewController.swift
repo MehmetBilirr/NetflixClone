@@ -7,8 +7,15 @@
 
 import UIKit
 
+
+protocol SearchResultViewControllerDelegate:AnyObject{
+    func searchResultsViewControllerDidTapItem(_ viewModel:TitlePreviewModel)
+}
+
+
 class SearchResultViewController: UIViewController {
     var titlesArray = [Title]()
+    public weak var delegate: SearchResultViewControllerDelegate?
     let searchResultsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,6 +82,26 @@ extension SearchResultViewController:UICollectionViewDelegate,UICollectionViewDa
         return cell ?? UICollectionViewCell()
     }
     
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let title = titlesArray[indexPath.row]
+        guard let titleName = title.original_name ?? title.original_title else {return}
+        print(titleName)
+        
+        NetworkServiceYT.shared.fetchVideo(query: titleName) { result in
+            switch result {
+            case .success(let video):
+                print(video.id)
+                let viewModel = TitlePreviewModel(title: titleName, youtubeView: video, titleOverview: title.overview ?? "")
+                self.delegate?.searchResultsViewControllerDidTapItem(viewModel)
+                
+            case.failure(let error):
+                print(error)
+            }
+        }
+        
+        
+        
+    }
     
 }
