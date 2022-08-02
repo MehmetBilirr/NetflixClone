@@ -10,7 +10,6 @@ import SnapKit
 
 protocol CollectionViewTableViewCellDelegate:AnyObject {
     func collectionViewTableViewCellDidTapCell(_ cell:CollectionViewTableViewCell,viewModel:TitlePreviewModel)
-    func collectionViewTableViewCellDownloadButtonTapped()
 }
 
 
@@ -73,7 +72,15 @@ extension CollectionViewTableViewCell {
         
     }
     private func downloadTitleAt(indexpath:IndexPath) {
-        print("Downloanding \(titlesArray[indexpath.row].original_title!)")
+        
+        DataPersistanceManager.shared.downloadTitleWith(model: titlesArray[indexpath.row]) { result in
+            switch result{
+            case.success():
+                print("downloaded to Database")
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
     
     
@@ -120,14 +127,11 @@ extension CollectionViewTableViewCell:UICollectionViewDelegate,UICollectionViewD
         let config = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
             let downloadAction = UIAction(title: "Download", subtitle: nil, image: nil, identifier: nil, discoverabilityTitle: nil, state: .off) { _ in
                 self.downloadTitleAt(indexpath: indexPath)
-                self.delegate?.collectionViewTableViewCellDownloadButtonTapped()
                 collectionView.reloadData()
                 
             
             }
-            let exitAction = UIAction(title: "Exit", subtitle: nil, image: nil, identifier: nil, discoverabilityTitle: nil, state: .off) { _ in
-                }
-            return UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [downloadAction,exitAction])
+            return UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [downloadAction])
         }
         
         return config
