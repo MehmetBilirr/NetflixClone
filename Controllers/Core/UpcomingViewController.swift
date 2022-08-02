@@ -94,7 +94,11 @@ extension UpcomingViewController:UITableViewDataSource,UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TitleTableViewCell.identifier, for: indexPath) as? TitleTableViewCell else { return UITableViewCell() }
-        cell.configure(title: titleArray[indexPath.row])
+        
+        
+        let title = titleArray[indexPath.row]
+        let titleViewModel = TitleViewModel(titleName: title.original_title ?? "", posterPath: title.poster_path ?? "")
+        cell.configure(title: titleViewModel)
                 
         
         cell.backgroundColor = .systemBackground

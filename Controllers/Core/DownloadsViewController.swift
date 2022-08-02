@@ -9,7 +9,7 @@ import UIKit
 
 class DownloadsViewController: UIViewController {
     private let downloadTableView = UITableView(frame: .zero, style: .grouped)
-    private var titleArray = [Title]()
+    private var titleArray = [TitleItem]()
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -17,6 +17,7 @@ class DownloadsViewController: UIViewController {
         
         setup()
         style()
+        fetchLocalStorageForDownload()
 
         
         
@@ -54,6 +55,24 @@ class DownloadsViewController: UIViewController {
     }
     
     
+    private func fetchLocalStorageForDownload() {
+        DataPersistanceManager.shared.fetchingTitlesFromDataBase { [weak self] result in
+            switch result {
+            case.success(let titles):
+                self?.titleArray = titles
+                DispatchQueue.main.async {
+                    self?.downloadTableView.reloadData()
+                }
+                
+                
+            case.failure(let error):
+                print(error.localizedDescription)
+            }
+            
+            
+        }
+    }
+    
     
         
     
@@ -69,7 +88,10 @@ extension DownloadsViewController:UITableViewDataSource,UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TitleTableViewCell.identifier, for: indexPath) as? TitleTableViewCell else { return UITableViewCell() }
-        cell.configure(title: titleArray[indexPath.row])
+        
+        let title = titleArray[indexPath.row]
+        let titleViewModel = TitleViewModel(titleName: title.original_title ?? "", posterPath: title.poster_path ?? "")
+        cell.configure(title: titleViewModel)
                 
         
         cell.backgroundColor = .systemBackground

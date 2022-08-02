@@ -92,11 +92,10 @@ extension TitleTableViewCell {
         
     }
     
-    func configure(title:Title) {
-        guard let path =  title.poster_path, let name = title.original_title ?? title.original_name else  {
+    func configure(title:TitleViewModel) {
+        let path =  title.posterPath
+        let name = title.titleName 
         
-            return
-        }
         
         let url = "https://image.tmdb.org/t/p/w500/\(path)"
         self.posterImage.sd_setImage(with: url.asUrl)
