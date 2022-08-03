@@ -29,6 +29,7 @@ final class HomeViewController: UIViewController {
     private let homeFeedTableView = UITableView(frame: .zero, style: .grouped)
     let sectionTitles : [String] = ["Trendıng Movıes","Popular", "Trendıng Tv","Upcomıng Movıes","Top Rated"]
     var titleArray = [Title]()
+    private let homeViewModel = HomeViewModel()
     static var heroViewdelegate : heroHeaderViewDelegate?
     
     
@@ -133,71 +134,18 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
         cell.delegate = self
         switch indexPath.section {
         case Sections.trendingMovies.rawValue:
-            NetworkServiceTMDB.shared.fetchTrendingMovies { result in
-                switch result {
-                case.success(let data):
-                    cell.configure(titles: data.results)
-                    let image = data.results[0].poster_path
-                    HomeViewController.heroViewdelegate?.getheroHeaderImage(data: image!)
-                    
-                    
-                case.failure(let error):
-                    print(error.localizedDescription)
-                }
-                
-
-            }
+            homeViewModel.fetchTrendingMovies(cell: cell)
         case Sections.popular.rawValue:
-            NetworkServiceTMDB.shared.fetchPopularMovies { result in
-                switch result {
-                case.success(let data):
-                    cell.configure(titles: data.results)
-                    
-                case.failure(let error):
-                    print(error.localizedDescription)
-                }
-                
-
-            }
+            homeViewModel.fetchPopularMovies(cell: cell)
             
         case Sections.trendingTvs.rawValue:
-            NetworkServiceTMDB.shared.fetchTrendingTvSeries { result in
-                switch result {
-                case.success(let data):
-                    cell.configure(titles: data.results)
-                    
-                case.failure(let error):
-                    print(error.localizedDescription)
-                }
-                
-
-            }
+            homeViewModel.fetchTrendingTvs(cell: cell)
             
         case Sections.upcoming.rawValue:
             
-            NetworkServiceTMDB.shared.fetchUpcomingMovies { result in
-                switch result {
-                case.success(let data):
-                    cell.configure(titles: data.results)
-                    
-                case.failure(let error):
-                    print(error.localizedDescription)
-                }
-                
-
-            }
+            homeViewModel.fetchUpcomingMovies(cell: cell)
         case Sections.topRated.rawValue:
-            NetworkServiceTMDB.shared.fetchTopRatedMovies { result in
-                switch result {
-                case.success(let data):
-                    cell.configure(titles: data.results)
-                    
-                case.failure(let error):
-                    print(error.localizedDescription)
-                }
-                
-
-            }
+            homeViewModel.fetchTopRatedMovies(cell: cell)
             
         
         default:

@@ -86,12 +86,11 @@ extension SearchResultViewController:UICollectionViewDelegate,UICollectionViewDa
         collectionView.deselectItem(at: indexPath, animated: true)
         let title = titlesArray[indexPath.row]
         guard let titleName = title.original_name ?? title.original_title else {return}
-        print(titleName)
+
         
         NetworkServiceYT.shared.fetchVideo(query: titleName) { result in
             switch result {
             case .success(let video):
-                print(video.id)
                 let viewModel = TitlePreviewModel(title: titleName, youtubeView: video, titleOverview: title.overview ?? "")
                 self.delegate?.searchResultsViewControllerDidTapItem(viewModel)
                 
