@@ -12,10 +12,17 @@ import UIKit
 
 
 class UpcomingViewController: UIViewController {
+    func veri(isim: String) {
+        print(isim)
+        print("adad")
+    }
+    
+    
     
     private let upcomingTableView = UITableView(frame: .zero, style: .grouped)
     private var titleArray = [Title]()
     private let upcomingViewModel = UpcomingViewModel()
+    var home = HomeViewController()
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -118,6 +125,8 @@ extension UpcomingViewController:UITableViewDataSource,UITableViewDelegate {
     
 
 }
+
+
 
     
     
