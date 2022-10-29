@@ -9,7 +9,8 @@ import UIKit
 import SnapKit
 
 
-protocol heroHeaderViewDelegate {
+
+protocol heroHeaderViewDelegate:AnyObject {
     func getheroHeaderImage(data:String)
 }
 
@@ -22,15 +23,17 @@ enum Sections:Int {
 }
 
 
+    
 
-
-final class HomeViewController: UIViewController {
+class HomeViewController: UIViewController {
     
     private let homeFeedTableView = UITableView(frame: .zero, style: .grouped)
     let sectionTitles : [String] = ["Trendıng Movıes","Popular", "Trendıng Tv","Upcomıng Movıes","Top Rated"]
     var titleArray = [Title]()
     private let homeViewModel = HomeViewModel()
-    static var heroViewdelegate : heroHeaderViewDelegate?
+    private var homeHeader = HeroHeaderUIView()
+    
+    
     
     
     
@@ -40,6 +43,7 @@ final class HomeViewController: UIViewController {
         style()
         layout()
         configureNavBar()
+        
         
         
         
@@ -61,11 +65,14 @@ extension HomeViewController {
         homeFeedTableView.register(CollectionViewTableViewCell.self, forCellReuseIdentifier: CollectionViewTableViewCell.identifier)
         view.addSubview(homeFeedTableView)
         
+        
+        
         homeFeedTableView.delegate = self
         homeFeedTableView.dataSource = self
         
         let headerView = HeroHeaderUIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
         homeFeedTableView.tableHeaderView = headerView
+        
         
     }
     

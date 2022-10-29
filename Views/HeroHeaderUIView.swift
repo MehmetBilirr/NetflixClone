@@ -9,18 +9,19 @@
 import UIKit
 import SnapKit
 import SDWebImage
-class HeroHeaderUIView: UIView {
+final class HeroHeaderUIView: UIView {
     private let playButton = UIButton()
     private let downloadButton = UIButton()
     private let heroImageView = UIImageView()
-    let homeVC = HomeViewController()
+    let homeV = HomeViewModel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         style()
         layout()
-        HomeViewController.heroViewdelegate = self
+        
+        HomeViewModel.heroViewDelegate = self
         
     }
     
@@ -101,6 +102,8 @@ extension HeroHeaderUIView {
 
 
 extension HeroHeaderUIView:heroHeaderViewDelegate {
+    
+    
     func getheroHeaderImage(data: String) {
         let url = "https://image.tmdb.org/t/p/w500/\(data)"
         self.heroImageView.sd_setImage(with: url.asUrl)

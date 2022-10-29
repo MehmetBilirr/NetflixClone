@@ -9,8 +9,9 @@ import Foundation
 import UIKit
 
 
-class HomeViewModel {
+final class HomeViewModel {
     
+    static var heroViewDelegate: heroHeaderViewDelegate?
     func fetchTrendingMovies(cell:CollectionViewTableViewCell){
         
         NetworkServiceTMDB.shared.fetchTrendingMovies { result in
@@ -18,7 +19,9 @@ class HomeViewModel {
             case.success(let data):
                 cell.configure(titles: data.results)
                 let image = data.results[0].poster_path
-                HomeViewController.heroViewdelegate?.getheroHeaderImage(data: image!)
+                HomeViewModel.heroViewDelegate?.getheroHeaderImage(data: image!)
+                
+                
                 
                 
             case.failure(let error):
@@ -88,4 +91,6 @@ class HomeViewModel {
 
     }
     }
+    
+    
 }
