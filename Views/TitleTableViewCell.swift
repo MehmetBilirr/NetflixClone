@@ -10,7 +10,7 @@ import SnapKit
 class TitleTableViewCell: UITableViewCell {
 
     static let identifier = "TitleTableViewCell"
-    var titlesArray = [Title]()
+    
     private let posterImage = UIImageView()
     private let nameLabel = UILabel()
     private let playButton = UIButton()

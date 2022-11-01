@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 protocol CollectionViewTableViewCellDelegate:AnyObject {
-    func collectionViewTableViewCellDidTapCell(_ cell:CollectionViewTableViewCell,viewModel:TitlePreviewModel)
+    func collectionViewTableViewCellDidTapCell(_ cell:CollectionViewTableViewCell,viewModel:TitlePreviewModel,title:Title)
 }
 
 
@@ -113,9 +113,10 @@ extension CollectionViewTableViewCell:UICollectionViewDelegate,UICollectionViewD
                 guard let title = self?.titlesArray[indexPath.row] else {return}
                 guard let strongSelf = self else {return}
                 let titleName = title.original_title ?? title.original_name
+                
                 let overview = title.overview
                 let viewModel = TitlePreviewModel(title: titleName ?? "", youtubeView: video, titleOverview: overview ?? "")
-                self?.delegate?.collectionViewTableViewCellDidTapCell(strongSelf, viewModel: viewModel)
+                self?.delegate?.collectionViewTableViewCellDidTapCell(strongSelf, viewModel: viewModel, title: title)
             case.failure(let error):
                 print(error)
             }

@@ -12,10 +12,7 @@ import UIKit
 
 
 class UpcomingViewController: UIViewController {
-    func veri(isim: String) {
-        print(isim)
-        print("adad")
-    }
+    
     
     
     
@@ -121,6 +118,7 @@ extension UpcomingViewController:UITableViewDataSource,UITableViewDelegate {
         let title = titleArray[indexPath.row]
         guard let titleName = title.original_name ?? title.original_title else {return}
         upcomingViewModel.fetchVideo(query: titleName, title: title)
+        
     }
     
 

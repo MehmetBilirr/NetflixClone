@@ -13,7 +13,7 @@ final class HeroHeaderUIView: UIView {
     private let playButton = UIButton()
     private let downloadButton = UIButton()
     private let heroImageView = UIImageView()
-    let homeV = HomeViewModel()
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -41,12 +41,18 @@ extension HeroHeaderUIView {
     
     private func style(){
         addSubview(heroImageView)
-        
+        heroImageView.translatesAutoresizingMaskIntoConstraints = false
         heroImageView.contentMode = .scaleAspectFit
         heroImageView.clipsToBounds = true
+        
+        
+        
 //        heroImageView.image = UIImage(named: "batman")
         
-        heroImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+       
+        
+       
         addGradient()
         addSubview(playButton)
         playButton.setTitle("Play", for: .normal)
@@ -88,7 +94,7 @@ extension HeroHeaderUIView {
         super.layoutSubviews()
         heroImageView.frame = bounds
     }
-    
+
     private func addGradient(){
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [

@@ -9,11 +9,15 @@ import UIKit
 import WebKit
 import SnapKit
 
+
+
 class TitlePreviewViewController: UIViewController {
     private let webView = WKWebView()
     private let titleLabel = UILabel()
     private let overviewLabel = UILabel()
     private let button = UIButton()
+    var chosenTitle:Title?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -55,9 +59,14 @@ extension TitlePreviewViewController {
         
         
         
+        
+        
+        
+        
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .red
         button.setTitle("Download", for: .normal)
+        button.addTarget(self, action: #selector(downloadButtonTapped), for: .touchUpInside)
         button.layer.cornerRadius = 5
         button.setTitleColor(.white, for: .normal)
         
@@ -100,5 +109,20 @@ extension TitlePreviewViewController {
         overviewLabel.text = model.titleOverview
         guard let url = URL(string: "https://www.youtube.com/embed/\(model.youtubeView.id.videoId)") else {return }
         webView.load(URLRequest(url: url))
+    }
+    
+    @objc func downloadButtonTapped(){
+        print("downloaded")
+        DataPersistanceManager.shared.downloadTitleWith(model: chosenTitle!) { [weak self] result in
+            
+            switch result {
+                
+            case .success():
+                print("downloaded")
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        
     }
 }

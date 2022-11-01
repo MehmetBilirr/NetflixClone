@@ -192,19 +192,19 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
 }
 
 extension HomeViewController:CollectionViewTableViewCellDelegate {
-    
-
-    
-    func collectionViewTableViewCellDidTapCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewModel) {
-        
+    func collectionViewTableViewCellDidTapCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewModel, title: Title) {
         DispatchQueue.main.async { [weak self] in
             let vc = TitlePreviewViewController()
             vc.configure(model: viewModel)
-            
+            vc.chosenTitle = title
             self?.navigationController?.pushViewController(vc, animated: true)
         }
-        
     }
+    
+    
+
+    
+    
     
     
 }

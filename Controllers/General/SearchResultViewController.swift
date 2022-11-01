@@ -91,6 +91,8 @@ extension SearchResultViewController:UICollectionViewDelegate,UICollectionViewDa
         NetworkServiceYT.shared.fetchVideo(query: titleName) { result in
             switch result {
             case .success(let video):
+                
+                
                 let viewModel = TitlePreviewModel(title: titleName, youtubeView: video, titleOverview: title.overview ?? "")
                 self.delegate?.searchResultsViewControllerDidTapItem(viewModel)
                 

@@ -29,6 +29,7 @@ class DataPersistanceManager {
         
         let item = TitleItem(context: context)
         
+        
         item.original_title = model.original_title
         item.id = Int64(model.id)
         item.original_name = model.original_name
