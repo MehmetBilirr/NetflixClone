@@ -1,2 +1,5 @@
 # NetflixClone
-/Users/mehmet/Desktop/Screen Recording 2022-10-29 at 20.18.58.mov
+
+
+https://user-images.githubusercontent.com/101524266/198845470-48c0cec8-45d5-49e7-b356-c7281261860c.mp4
+
