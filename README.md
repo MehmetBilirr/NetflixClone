@@ -4,7 +4,6 @@
  ✅ MVVM Pattern <br />
  ✅ UIKIT <br />
  ✅ Snapkit <br />
- ✅ Auto layout <br />
  ✅ Web services <br />
  ✅ Navigation <br />
  ✅ Tabbar navigation <br />
