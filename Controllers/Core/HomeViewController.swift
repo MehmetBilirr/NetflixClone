@@ -22,6 +22,12 @@ enum Sections:Int {
     case topRated = 4
 }
 
+protocol HomeViewInterface:AnyObject{
+    
+    func setup()
+    func configureNavBar()
+    func fetchData()
+}
 
     
 
@@ -30,100 +36,22 @@ class HomeViewController: UIViewController {
     private let homeFeedTableView = UITableView(frame: .zero, style: .grouped)
     let sectionTitles : [String] = ["Trendıng Movıes","Popular", "Trendıng Tv","Upcomıng Movıes","Top Rated"]
     var titleArray = [Title]()
-    private let homeViewModel = HomeViewModel()
+    private let viewModel = HomeViewModel()
     private var homeHeader = HeroHeaderUIView()
-    
-    
-    
-    
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
-        setup()
-        style()
-        layout()
-        configureNavBar()
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        viewModel.view = self
+        viewModel.viewDidLoad()
     }
     
-
-   
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        homeFeedTableView.frame = view.bounds
+    }
+    
 }
 
-
-extension HomeViewController {
-    
-    private func setup(){
-        homeFeedTableView.register(CollectionViewTableViewCell.self, forCellReuseIdentifier: CollectionViewTableViewCell.identifier)
-        view.addSubview(homeFeedTableView)
-        
-        
-        
-        homeFeedTableView.delegate = self
-        homeFeedTableView.dataSource = self
-        
-        let headerView = HeroHeaderUIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
-        homeFeedTableView.tableHeaderView = headerView
-        
-        
-    }
-    
-    
-    
-    private func style(){
-        
-        view.backgroundColor = .systemBackground
-        
-        
-        
-        
-    }
-    
-    private func layout(){
-        
-        homeFeedTableView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
-        
-    }
-    private func configureNavBar(){
-        
-        let netflixButton = UIButton()
-        netflixButton.setImage(UIImage(named: "netflix"), for: .normal)
-            
-        let leftButton = UIBarButtonItem(customView: netflixButton)
-        leftButton.customView?.translatesAutoresizingMaskIntoConstraints = false
-        leftButton.customView?.snp.makeConstraints {
-         $0.width.height.equalTo(32)
-        }
-        navigationItem.leftBarButtonItem = leftButton
-        
-        
-        
-        navigationItem.rightBarButtonItems = [
-            
-            UIBarButtonItem(image: UIImage(systemName: "person"), style: .done, target: self, action: nil),
-            UIBarButtonItem(image: UIImage(systemName: "play.rectangle"), style: .done, target: self, action: nil)
-            
-        ]
-    }
-    
-    
-    
-    
-    
-}
 
 extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
     
@@ -141,18 +69,16 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
         cell.delegate = self
         switch indexPath.section {
         case Sections.trendingMovies.rawValue:
-            homeViewModel.fetchTrendingMovies(cell: cell)
+            cell.configure(titles: viewModel.trendingMovies)
         case Sections.popular.rawValue:
-            homeViewModel.fetchPopularMovies(cell: cell)
-            
+            cell.configure(titles: viewModel.popularMovies)
         case Sections.trendingTvs.rawValue:
-            homeViewModel.fetchTrendingTvs(cell: cell)
+            cell.configure(titles: viewModel.trendingTVs)
             
         case Sections.upcoming.rawValue:
-            
-            homeViewModel.fetchUpcomingMovies(cell: cell)
+            cell.configure(titles: viewModel.upcomingMovies)
         case Sections.topRated.rawValue:
-            homeViewModel.fetchTopRatedMovies(cell: cell)
+            cell.configure(titles: viewModel.topRatedMovies)
             
         
         default:
@@ -201,13 +127,56 @@ extension HomeViewController:CollectionViewTableViewCellDelegate {
         }
     }
     
+}
+
+extension HomeViewController:HomeViewInterface {
+    func fetchData() {
+        viewModel.fetchPopularMovies()
+        viewModel.fetchTopRatedMovies()
+        viewModel.fetchUpcomingMovies()
+        viewModel.fetchTrendingMovies()
+        viewModel.fetchTrendingTvs()
+    }
     
+    func setup() {
+        view.backgroundColor = .systemBackground
+        
+        homeFeedTableView.register(CollectionViewTableViewCell.self, forCellReuseIdentifier: CollectionViewTableViewCell.identifier)
+        view.addSubview(homeFeedTableView)
+        
+        homeFeedTableView.delegate = self
+        homeFeedTableView.dataSource = self
+        
+        let headerView = HeroHeaderUIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
+        homeFeedTableView.tableHeaderView = headerView
+    }
 
     
-    
+    func configureNavBar() {
+        let netflixButton = UIButton()
+        netflixButton.setImage(UIImage(named: "netflix"), for: .normal)
+            
+        let leftButton = UIBarButtonItem(customView: netflixButton)
+        leftButton.customView?.translatesAutoresizingMaskIntoConstraints = false
+        leftButton.customView?.snp.makeConstraints {
+         $0.width.height.equalTo(32)
+        }
+        navigationItem.leftBarButtonItem = leftButton
+        
+        
+        
+        navigationItem.rightBarButtonItems = [
+            
+            UIBarButtonItem(image: UIImage(systemName: "person"), style: .done, target: self, action: nil),
+            UIBarButtonItem(image: UIImage(systemName: "play.rectangle"), style: .done, target: self, action: nil)
+            
+        ]
+    }
     
     
 }
+
+
 
 
     
