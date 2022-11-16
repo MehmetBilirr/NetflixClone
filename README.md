@@ -10,7 +10,6 @@
  ✅ Search Bar <br />
  ✅ CollectionView and TableView <br />
  ✅ CoreData <br />
- ✅ Auto layout <br />
  ✅ SDWebImage <br />
  ✅ Webkit <br />
  ✅ URLSession <br />
