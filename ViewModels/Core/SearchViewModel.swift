@@ -8,9 +8,10 @@
 import Foundation
 import UIKit
 protocol MainViewModelInterface{
+    func viewDidLoad()
+    func fetchData()
     func getTitle(at indexpath:IndexPath) -> Title
     func numberOfRows() -> Int
-    func fetchData()
 }
 
 protocol SearchViewModelInterface:AnyObject,MainViewModelInterface {

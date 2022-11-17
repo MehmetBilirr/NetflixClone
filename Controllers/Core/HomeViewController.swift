@@ -42,6 +42,7 @@ final class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.view = self
+        viewModel.navigationController = navigationController
         viewModel.viewDidLoad()
     }
     
@@ -118,13 +119,8 @@ extension HomeViewController:UITableViewDataSource,UITableViewDelegate {
 }
 
 extension HomeViewController:CollectionViewTableViewCellDelegate {
-    func collectionViewTableViewCellDidTapCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewModel, title: Title) {
-        DispatchQueue.main.async { [weak self] in
-            let vc = TitlePreviewViewController()
-            vc.configure(model: viewModel)
-            vc.chosenTitle = title
-            self?.navigationController?.pushViewController(vc, animated: true)
-        }
+    func collectionViewTableViewCellDidTapCell(_ cell: CollectionViewTableViewCell, model: TitlePreviewModel, title: Title) {
+        viewModel.didTapCell(cell, viewModel: model, title: title)
     }
     
 }

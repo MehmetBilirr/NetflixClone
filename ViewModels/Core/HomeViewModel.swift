@@ -10,11 +10,13 @@ import UIKit
 
 protocol HomeViewModelInterface:AnyObject{
     var view:HomeViewInterface? {get set}
+    var navigationController:UINavigationController? {get set}
     func fetchTrendingMovies()
     func fetchPopularMovies()
     func fetchUpcomingMovies()
     func fetchTrendingTvs()
     func fetchTopRatedMovies()
+    func didTapCell(_ cell:CollectionViewTableViewCell,viewModel:TitlePreviewModel,title:Title)
 }
 
 final class HomeViewModel {
@@ -24,6 +26,7 @@ final class HomeViewModel {
     var upcomingMovies = [Title]()
     var topRatedMovies = [Title]()
     weak var view: HomeViewInterface?
+    weak var navigationController: UINavigationController?
     static var heroViewDelegate: heroHeaderViewDelegate?
     
 }
@@ -110,5 +113,14 @@ extension HomeViewModel:HomeViewModelInterface {
             print(error.localizedDescription)
         }
     }
+    }
+    func didTapCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewModel,title:Title) {
+        DispatchQueue.main.async { [weak self] in
+            let vc = TitlePreviewViewController()
+            vc.configure(model: viewModel)
+            vc.chosenTitle = title
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
+        
     }
 }
