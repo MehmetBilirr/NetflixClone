@@ -10,7 +10,12 @@ import WebKit
 import SnapKit
 
 
-
+protocol TitlePreviewViewInterface:AnyObject {
+    func setup()
+    func style()
+    func layout()
+    
+}
 
 final class TitlePreviewViewController: UIViewController {
     private let webView = WKWebView()
@@ -18,29 +23,44 @@ final class TitlePreviewViewController: UIViewController {
     private let overviewLabel = UILabel()
     private let button = UIButton()
     var chosenTitle:Title?
-    
+    private lazy var viewModel = TitlePreviewViewModel()
     override func viewDidLoad() {
         super.viewDidLoad()
-        setup()
-        style()
-        layout()
+        viewModel.view = self
+        viewModel.viewDidLoad()
         
     }
-    
-
    
 }
 
 extension TitlePreviewViewController {
     
-    private func setup(){
+    
+    func configure(model:TitlePreviewModel) {
+        
+        titleLabel.text = model.title
+        overviewLabel.text = model.titleOverview
+        guard let url = URL(string: "https://www.youtube.com/embed/\(model.youtubeView.id.videoId)") else {return }
+        webView.load(URLRequest(url: url))
+    }
+    
+    @objc func downloadButtonTapped(){
+        viewModel.didTapdownloadButton(title: chosenTitle!)
+        
+        
+    }
+}
+
+
+extension TitlePreviewViewController:TitlePreviewViewInterface {
+    func setup() {
         view.addSubview(webView)
         view.addSubview(titleLabel)
         view.addSubview(overviewLabel)
         view.addSubview(button)
     }
     
-    private func style(){
+    func style() {
         view.backgroundColor = .systemBackground
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -72,11 +92,9 @@ extension TitlePreviewViewController {
         button.setTitleColor(.white, for: .normal)
         
         webView.translatesAutoresizingMaskIntoConstraints = false
-        
     }
     
-    private func layout(){
-        
+    func layout() {
         webView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(100)
             make.left.equalToSuperview()
@@ -101,29 +119,9 @@ extension TitlePreviewViewController {
             make.centerX.equalTo(view.center.x)
             make.width.equalTo(200)
         }
-        
     }
     
-    func configure(model:TitlePreviewModel) {
-        
-        titleLabel.text = model.title
-        overviewLabel.text = model.titleOverview
-        guard let url = URL(string: "https://www.youtube.com/embed/\(model.youtubeView.id.videoId)") else {return }
-        webView.load(URLRequest(url: url))
-    }
     
-    @objc func downloadButtonTapped(){
-        print("downloaded")
-        DataPersistanceManager.shared.downloadTitleWith(model: chosenTitle!) { [weak self] result in
-            
-            switch result {
-                
-            case .success():
-                print("downloaded")
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
-        
-    }
 }
+
+
