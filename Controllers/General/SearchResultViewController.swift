@@ -8,14 +8,8 @@
 import UIKit
 
 
-protocol SearchResultViewControllerDelegate:AnyObject{
-    func searchResultsViewControllerDidTapItem(_ viewModel:TitlePreviewModel)
-}
-
-
 class SearchResultViewController: UIViewController {
     var titlesArray = [Title]()
-    public weak var delegate: SearchResultViewControllerDelegate?
     let searchResultsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,9 +59,6 @@ extension SearchResultViewController {
     }
     
 
-   
-
-
 
 
 extension SearchResultViewController:UICollectionViewDelegate,UICollectionViewDataSource {
@@ -85,18 +76,21 @@ extension SearchResultViewController:UICollectionViewDelegate,UICollectionViewDa
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         let title = titlesArray[indexPath.row]
-        guard let titleName = title.original_name ?? title.original_title else {return}
-
+        guard let query = title.original_title else {return}
+        guard let overView = title.overview else {return}
         
-        NetworkServiceYT.shared.fetchVideo(query: titleName) { result in
-            switch result {
+        NetworkServiceYT.shared.fetchVideo(query: query) { result in
+            switch result {
             case .success(let video):
                 
+                DispatchQueue.main.async { [weak self] in
+                    let titlePreviewVC = TitlePreviewViewController()
+                    let model = TitlePreviewModel(title: query, youtubeView: video, titleOverview: overView)
+                    titlePreviewVC.configure(model:model)
+                    self?.navigationController?.pushViewController(titlePreviewVC, animated: true)
+                    }
                 
-                let viewModel = TitlePreviewModel(title: titleName, youtubeView: video, titleOverview: title.overview ?? "")
-                self.delegate?.searchResultsViewControllerDidTapItem(viewModel)
-                
-            case.failure(let error):
+            case .failure(let error):
                 print(error)
             }
         }

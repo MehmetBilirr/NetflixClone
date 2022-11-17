@@ -10,7 +10,11 @@ import UIKit
 
 protocol HomeViewModelInterface:AnyObject{
     var view:HomeViewInterface? {get set}
-
+    func fetchTrendingMovies()
+    func fetchPopularMovies()
+    func fetchUpcomingMovies()
+    func fetchTrendingTvs()
+    func fetchTopRatedMovies()
 }
 
 final class HomeViewModel {
@@ -21,6 +25,18 @@ final class HomeViewModel {
     var topRatedMovies = [Title]()
     weak var view: HomeViewInterface?
     static var heroViewDelegate: heroHeaderViewDelegate?
+    
+}
+
+extension HomeViewModel:HomeViewModelInterface {
+    
+    
+
+    func viewDidLoad() {
+        view?.fetchData()
+        view?.setup()
+        view?.configureNavBar()
+    }
     
     
     func fetchTrendingMovies(){
@@ -95,17 +111,4 @@ final class HomeViewModel {
         }
     }
     }
-}
-
-extension HomeViewModel:HomeViewModelInterface {
-    
-    
-
-    func viewDidLoad() {
-        view?.fetchData()
-        view?.setup()
-        view?.configureNavBar()
-    }
-    
-    
 }
