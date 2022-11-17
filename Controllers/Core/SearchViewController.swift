@@ -9,10 +9,6 @@ import UIKit
 
 class SearchViewController: UIViewController {
     
-    
-    
-    
-    
     private let discoverTableView = UITableView(frame: .zero, style: .grouped)
     private var titleArray = [Title]()
     private var searchController = UISearchController()
@@ -103,8 +99,8 @@ extension SearchViewController:UITableViewDataSource,UITableViewDelegate {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TitleTableViewCell.identifier, for: indexPath) as? TitleTableViewCell else { return UITableViewCell() }
         
         let title = titleArray[indexPath.row]
-        let titleViewModel = TitleViewModel(titleName: title.original_title ?? "", posterPath: title.poster_path ?? "")
-        cell.configure(title: titleViewModel)
+
+        cell.configure(title: title)
         cell.backgroundColor = .systemBackground
         return cell
     }

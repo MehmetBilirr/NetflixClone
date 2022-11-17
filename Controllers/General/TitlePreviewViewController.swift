@@ -11,7 +11,8 @@ import SnapKit
 
 
 
-class TitlePreviewViewController: UIViewController {
+
+final class TitlePreviewViewController: UIViewController {
     private let webView = WKWebView()
     private let titleLabel = UILabel()
     private let overviewLabel = UILabel()

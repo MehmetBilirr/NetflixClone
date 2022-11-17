@@ -92,9 +92,9 @@ extension TitleTableViewCell {
         
     }
     
-    func configure(title:TitleViewModel) {
-        let path =  title.posterPath
-        let name = title.titleName 
+    func configure(title:Title) {
+        guard let path =  title.poster_path else {return}
+        guard let name = title.original_title else {return}
         
         
         let url = "https://image.tmdb.org/t/p/w500/\(path)"

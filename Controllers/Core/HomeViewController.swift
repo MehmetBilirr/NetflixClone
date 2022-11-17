@@ -31,7 +31,7 @@ protocol HomeViewInterface:AnyObject{
 
     
 
-class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController {
     
     private let homeFeedTableView = UITableView(frame: .zero, style: .grouped)
     let sectionTitles : [String] = ["Trendıng Movıes","Popular", "Trendıng Tv","Upcomıng Movıes","Top Rated"]
