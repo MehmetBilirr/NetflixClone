@@ -7,21 +7,20 @@
 
 import UIKit
 
-class DownloadsViewController: UIViewController {
+protocol DownloadsViewInterface:AnyObject {
+    func setup()
+    func fetchLocalStorageForDownload()
+    func reloadData()
+}
+
+final class DownloadsViewController: UIViewController {
     private let downloadTableView = UITableView(frame: .zero, style: .grouped)
-    private var titleArray = [TitleItem]()
+    private lazy var viewModel = DownloadViewModel()
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
-        setup()
-        style()
-        fetchLocalStorageForDownload()
-
-        
-        
-        
+        viewModel.view = self
+        viewModel.viewDidLoad()
     }
     
     override func viewDidLayoutSubviews() {
@@ -29,8 +28,38 @@ class DownloadsViewController: UIViewController {
         downloadTableView.frame = view.bounds
     }
     
-    private func setup(){
+    
+}
+
+extension DownloadsViewController:UITableViewDataSource,UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.numberOfRows()
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TitleTableViewCell.identifier, for: indexPath) as? TitleTableViewCell else { return UITableViewCell() }
+        cell.backgroundColor = .systemBackground
+        cell.setup(title: viewModel.getTitle(at: indexPath))
         
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 140
+    }
+    
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
+        viewModel.deleteItem(at: indexPath, tableView: tableView, editingStyle: editingStyle)
+    }
+    
+}
+
+
+extension DownloadsViewController:DownloadsViewInterface {
+    func setup() {
+        view.backgroundColor = .systemBackground
         downloadTableView.register(TitleTableViewCell.self, forCellReuseIdentifier: TitleTableViewCell.identifier)
         view.addSubview(downloadTableView)
         
@@ -46,101 +75,15 @@ class DownloadsViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: NSNotification.Name("downloaded"), object: nil, queue: nil) { _ in
             self.fetchLocalStorageForDownload()
         }
-        
-        
     }
     
-    
-    
-    private func style(){
-        
-        view.backgroundColor = .systemBackground
+    func fetchLocalStorageForDownload() {
+        viewModel.fetchData()
+       
     }
     
-    
-    private func fetchLocalStorageForDownload() {
-        DataPersistanceManager.shared.fetchingTitlesFromDataBase { [weak self] result in
-            switch result {
-            case.success(let titles):
-                self?.titleArray = titles
-                DispatchQueue.main.async {
-                    self?.downloadTableView.reloadData()
-                }
-                
-                
-            case.failure(let error):
-                print(error.localizedDescription)
-            }
-            
-            
-        }
-    }
-    
-    
-        
-    
-    
-   
-
-}
-
-extension DownloadsViewController:UITableViewDataSource,UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return titleArray.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TitleTableViewCell.identifier, for: indexPath) as? TitleTableViewCell else { return UITableViewCell() }
-
-        
-                
-        
-        cell.backgroundColor = .systemBackground
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 140
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        let title = titleArray[indexPath.row]
-        guard let titleName = title.original_name ?? title.original_title else {return}
-        NetworkServiceYT.shared.fetchVideo(query: titleName) { result in
-            switch result {
-            case .success(let video):
-                
-                DispatchQueue.main.async { [weak self] in
-                    let vc = TitlePreviewViewController()
-                    let viewModel = TitlePreviewModel(title: titleName, youtubeView: video, titleOverview: title.overview ?? "")
-                    vc.configure(model: viewModel)
-                    
-                    self?.navigationController?.pushViewController(vc, animated: true)
-                    }
-                
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        switch editingStyle {
-        case.delete:
-            DataPersistanceManager.shared.deleteTitleWith(model: titleArray[indexPath.row]) { [weak self] result in
-                switch result {
-                case.success():
-                    print("Deleted from the database")
-                case.failure(let error):
-                    print(error.localizedDescription)
-                }
-                self?.titleArray.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .fade)
-            }
-        default:
-            break;
-        }
+    func reloadData() {
+        downloadTableView.reloadData()
     }
     
 }

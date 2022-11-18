@@ -38,11 +38,12 @@ extension TitlePreviewViewController {
     
     func configure(model:TitlePreviewModel) {
         
-        titleLabel.text = model.title
-        overviewLabel.text = model.titleOverview
+        titleLabel.text = model.title.original_title
+        overviewLabel.text = model.title.overview
         guard let url = URL(string: "https://www.youtube.com/embed/\(model.youtubeView.id.videoId)") else {return }
         webView.load(URLRequest(url: url))
     }
+    
     
     @objc func downloadButtonTapped(){
         viewModel.didTapdownloadButton(title: chosenTitle!)

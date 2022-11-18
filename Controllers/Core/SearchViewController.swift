@@ -62,7 +62,8 @@ extension SearchViewController:UISearchResultsUpdating,UISearchControllerDelegat
     
     func updateSearchResults(for searchController: UISearchController) {
         
-        viewModel.pushToSearchResultVC(searchController: searchController)
+        guard let text = searchController.searchBar.text,!text.trimmingCharacters(in: .whitespaces).isEmpty,text.trimmingCharacters(in: .whitespaces).count >= 3 else {return}
+        viewModel.pushToSearchResultVC(query: text, searchController: searchController)
         
     }
     

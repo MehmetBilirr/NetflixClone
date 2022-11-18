@@ -18,7 +18,7 @@ protocol SearchViewModelInterface:AnyObject,MainViewModelInterface {
     var navigationController:UINavigationController? {get set}
     var view:SearchViewInterface? {get set}
     func viewDidLoad()
-    func pushToSearchResultVC(searchController:UISearchController)
+    func pushToSearchResultVC(query:String,searchController:UISearchController)
 
 }
 
@@ -64,19 +64,17 @@ extension SearchViewModel:SearchViewModelInterface {
     func numberOfRows() -> Int {
         return titleArray.count
     }
-    func pushToSearchResultVC(searchController: UISearchController) {
+    
+    func pushToSearchResultVC(query: String, searchController: UISearchController) {
+        guard let resultController = searchController.searchResultsController as? SearchResultViewController else {return}
         
-        let searchBar = searchController.searchBar
-        guard let query = searchBar.text,
-                !query.trimmingCharacters(in: .whitespaces).isEmpty,
-              query.trimmingCharacters(in: .whitespaces).count >= 3,
-              let resultController = searchController.searchResultsController as? SearchResultViewController else {return}
         
         NetworkServiceTMDB.shared.fetchSearchResult(query: query) { result in
             switch result {
             case.success(let titles):
                 resultController.titlesArray = titles.results
                 DispatchQueue.main.async {
+                    
                     resultController.searchResultsCollectionView.reloadData()
                 }
 

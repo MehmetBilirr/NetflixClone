@@ -24,6 +24,7 @@ class SearchResultViewController: UIViewController {
         viewModel.navigationController = navigationController
         viewModel.viewDidLoad()
 
+
     }
     
     override func viewDidLayoutSubviews() {
@@ -49,6 +50,7 @@ extension SearchResultViewController:UICollectionViewDelegate,UICollectionViewDa
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         let title = titlesArray[indexPath.row]
+
         viewModel.fetchData(title: title)
     }
     

@@ -29,7 +29,6 @@ extension TitlePreviewViewModel:TitlePreviewViewModelInterface {
     }
     
     func didTapdownloadButton(title: Title) {
-        
         DataPersistanceManager.shared.downloadTitleWith(model: title) { [weak self] result in
             
             switch result {

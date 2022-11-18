@@ -57,15 +57,15 @@ extension UpcomingViewModel:UpcomingViewModelInterface {
     }
     
     func fetchVideo(at indexpath: IndexPath) {
-        guard let query = titleArray[indexpath.row].original_title else {return}
-        guard let overview = titleArray[indexpath.row].overview else {return}
+         let title = titleArray[indexpath.row]
+        guard let query = title.original_title else {return}
         NetworkServiceYT.shared.fetchVideo(query: query) { result in
             switch result {
             case .success(let video):
                 
                 DispatchQueue.main.async { [weak self] in
                     let titlePreviewVC = TitlePreviewViewController()
-                    let model = TitlePreviewModel(title: query, youtubeView: video, titleOverview: overview)
+                    let model = TitlePreviewModel(title: title, youtubeView: video)
                     titlePreviewVC.configure(model:model )
                     self?.navigationController?.pushViewController(titlePreviewVC, animated: true)
                     }
