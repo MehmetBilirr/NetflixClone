@@ -1,19 +1,19 @@
 # NetflixClone
 
 # Technology and structures
- ✅ MVVM Pattern <br />
- ✅ UIKIT <br />
- ✅ Snapkit <br />
- ✅ Web services <br />
- ✅ Navigation <br />
- ✅ Tabbar navigation <br />
- ✅ Search Bar <br />
- ✅ CollectionView and TableView <br />
- ✅ CoreData <br />
- ✅ SDWebImage <br />
- ✅ Webkit <br />
- ✅ URLSession <br />
- ✅ RESTful API <br />
+ * MVVM Pattern <br />
+ * UIKIT <br />
+ * Snapkit <br />
+ * Web services <br />
+ * Navigation <br />
+ * Tabbar navigation <br />
+ * Search Bar <br />
+ * CollectionView and TableView <br />
+ * CoreData <br />
+ * SDWebImage <br />
+ * Webkit <br />
+ * URLSession <br />
+ * RESTful API <br />
  
  
 # App Recording
